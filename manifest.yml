@@ -1,56 +1,71 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: my-app
   labels:
-    app: webapp
-  name: webapp-deployment
+    app: my-app
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: webapp
+      app: my-app
   template:
     metadata:
       labels:
-        app: webapp
+        app: my-app
     spec:
       containers:
-      - image: adhig93/kubernetesjenkins:version1
-        imagePullPolicy: Always
-        name: nodejs
-        ports:
-        - containerPort: 3080
-      imagePullSecrets:
-      - name: dockerhub
-
+        - name: my-app
+          image: your-ecr-repository-uri:latest
+          volumeMounts:
+            - name: data-volume
+              mountPath: /app/data
+          env:
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: my-secrets
+                  key: api-key
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: my-secrets
+                  key: db-username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: my-secrets
+                  key: db-password
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: my-pvc
 ---
-
 apiVersion: v1
-kind: Service
+kind: PersistentVolumeClaim
 metadata:
-  name: webapp-svc
+  name: my-pvc
 spec:
-  ports:
-  - port: 80
-    targetPort: 3080
-  selector:
-    app: webapp
-
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
 ---
-
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: ingress
-spec:
-  ingressClassName: nginx
-  rules:
-  - http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: webapp-svc
-            port: 
-              number: 80
+  name: my-config
+data:
+  app-config.yml: |-
+    some-config-key: some-config-value
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-secrets
+type: Opaque
+data:
+  api-key: BASE64_ENCODED_API_KEY
+  db-username: BASE64_ENCODED_DB_USERNAME
+  db-password: BASE64_ENCODED_DB_PASSWORD
