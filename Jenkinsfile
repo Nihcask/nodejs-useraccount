@@ -1,10 +1,5 @@
 pipeline {
     agent any
-    
-    #triggers {
-        #webhook('')
-    #}
-    
     environment {
         // Define environment variables for ECR and Kubernetes
         ECR_REGISTRY = '957955336045.dkr.ecr.ap-south-1.amazonaws.com/my-docker-repo'
