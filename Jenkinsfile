@@ -1,9 +1,9 @@
 pipeline {
     agent any
     
-    triggers {
-        webhook('')
-    }
+    #triggers {
+        #webhook('')
+    #}
     
     environment {
         // Define environment variables for ECR and Kubernetes
