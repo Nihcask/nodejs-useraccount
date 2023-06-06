@@ -19,7 +19,7 @@ pipeline {
                     dockerImage = docker.build("${ECR_REGISTRY}/${ECR_REPO}:latest", "-f ${DOCKERFILE_PATH} .")
                     
                     // Log in to ECR
-                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'your-ecr-credentials-id', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'credentials', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                         docker.withRegistry("https://${ECR_REGISTRY}", 'ecr') {
                             // Push the Docker image to ECR
                             dockerImage.push()
