@@ -6,7 +6,7 @@ pipeline {
         ECR_REPO = 'my-docker-repo'
         KUBE_NAMESPACE = 'your-kubernetes-namespace'
         KUBE_DEPLOYMENT = 'your-kubernetes-deployment'
-        DOCKERFILE_PATH = 'path/to/Dockerfile'
+        DOCKERFILE_PATH = './Dockerfile'
     }
     
     stages {
