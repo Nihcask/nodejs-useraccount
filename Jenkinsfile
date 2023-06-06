@@ -7,8 +7,8 @@ pipeline {
     
     environment {
         // Define environment variables for ECR and Kubernetes
-        ECR_REGISTRY = 'your-ecr-registry'
-        ECR_REPO = 'your-ecr-repo'
+        ECR_REGISTRY = '957955336045.dkr.ecr.ap-south-1.amazonaws.com/my-docker-repo'
+        ECR_REPO = 'my-docker-repo'
         KUBE_NAMESPACE = 'your-kubernetes-namespace'
         KUBE_DEPLOYMENT = 'your-kubernetes-deployment'
         DOCKERFILE_PATH = 'path/to/Dockerfile'
